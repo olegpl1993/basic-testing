@@ -1,5 +1,7 @@
 import { readFileAsynchronously, doStuffByTimeout, doStuffByInterval } from '.';
 import path from 'path';
+import fsPomises from 'fs/promises';
+import fs from 'fs';
 
 describe('doStuffByTimeout', () => {
   beforeAll(() => {
@@ -69,10 +71,23 @@ describe('readFileAsynchronously', () => {
   });
 
   test('should return null if file does not exist', async () => {
-    // Write your test here
+    const joinSpy = jest.spyOn(path, 'join');
+    const testPath = 'test.txt';
+    const fileContent = await readFileAsynchronously(testPath);
+    expect(fileContent).toBeNull();
+    joinSpy.mockRestore();
   });
 
   test('should return file content if file exists', async () => {
-    // Write your test here
+    const expectedText = 'Hello, World!';
+    const filePath = 'test.txt';
+    const readFileMock = jest
+      .spyOn(fsPomises, 'readFile')
+      .mockResolvedValue(Buffer.from(expectedText));
+    const existsSyncMock = jest.spyOn(fs, 'existsSync').mockReturnValue(true);
+    const result = await readFileAsynchronously(filePath);
+    expect(result).toBe(expectedText);
+    readFileMock.mockRestore();
+    existsSyncMock.mockRestore();
   });
 });
