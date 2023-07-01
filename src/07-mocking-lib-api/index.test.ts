@@ -1,10 +1,17 @@
-// Uncomment the code below and write your tests
-/* import axios from 'axios';
-import { throttledGetDataFromApi } from './index'; */
+import axios from 'axios';
+import { throttledGetDataFromApi } from './index';
 
 describe('throttledGetDataFromApi', () => {
   test('should create instance with provided base url', async () => {
-    // Write your test here
+    const baseURL = 'https://jsonplaceholder.typicode.com';
+    const axiosClient = axios.create({
+      baseURL,
+    });
+    jest.spyOn(axios, 'create').mockReturnValueOnce(axiosClient);
+    await throttledGetDataFromApi('/posts');
+    expect(axios.create).toHaveBeenCalledWith({
+      baseURL,
+    });
   });
 
   test('should perform request to correct provided url', async () => {
