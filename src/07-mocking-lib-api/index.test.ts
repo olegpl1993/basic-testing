@@ -15,9 +15,11 @@ describe('throttledGetDataFromApi', () => {
     const axiosClient = axios.create({
       baseURL,
     });
-    jest.spyOn(axios, 'create').mockReturnValueOnce(axiosClient);
+    const mockedCreate = jest
+      .spyOn(axios, 'create')
+      .mockReturnValueOnce(axiosClient);
     await throttledGetDataFromApi('/posts');
-    expect(axios.create).toHaveBeenCalledWith({
+    expect(mockedCreate).toHaveBeenCalledWith({
       baseURL,
     });
   });
