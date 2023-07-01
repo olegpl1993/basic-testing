@@ -1,8 +1,5 @@
-// Uncomment the code below and write your tests
-import {
-  /*readFileAsynchronously,*/ doStuffByTimeout,
-  doStuffByInterval,
-} from '.';
+import { readFileAsynchronously, doStuffByTimeout, doStuffByInterval } from '.';
+import path from 'path';
 
 describe('doStuffByTimeout', () => {
   beforeAll(() => {
@@ -64,7 +61,11 @@ describe('doStuffByInterval', () => {
 
 describe('readFileAsynchronously', () => {
   test('should call join with pathToFile', async () => {
-    // Write your test here
+    const joinSpy = jest.spyOn(path, 'join');
+    const testPath = 'test.txt';
+    await readFileAsynchronously(testPath);
+    expect(joinSpy).toHaveBeenCalledWith(__dirname, testPath);
+    joinSpy.mockRestore();
   });
 
   test('should return null if file does not exist', async () => {
